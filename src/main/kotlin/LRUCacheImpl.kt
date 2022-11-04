@@ -55,6 +55,7 @@ class LRUCacheImpl<K, V>(
         return elementsMap[key]
             ?.also { prioritizeNode(it) }
             ?.value
+            ?.also { assert(linkedListHead == it) }
             .also { checkClassInvariant() }
     }
 
@@ -67,8 +68,7 @@ class LRUCacheImpl<K, V>(
             ?: ensureSizeFitsCapacity()
         prioritizeNode(newNode)
 
-        // does not change priority for key because priority is already maxed
-        assert(get(key) == value)
+        assert(linkedListHead == value)
         checkClassInvariant()
     }
 
